@@ -3,38 +3,36 @@ const ctx = canvas.getContext('2d');
 canvas.width = 800;
 canvas.height = 600;
 
-let swimmer = new Image();
-swimmer.src = 'anne.webp'; // Image de la nageuse
-let shark = new Image();
-shark.src = 'shark.webp'; // Image du requin
+let swimmer = { emoji: '🏊‍♀️', x: 50, y: canvas.height / 2, size: 48 };
+let shark = { emoji: '🦈', x: canvas.width - 120, y: canvas.height / 2 - 24, size: 48 };
 let obstacles = [];
 let score = 0;
 let gameOver = false;
 
 function createObstacle() {
-    let img = new Image();
-    img.src = 'bridge.webp'; // Image d'obstacle
     let obstacle = {
-        img: img,
+        emoji: '🌉',
         x: canvas.width,
         y: Math.random() * (canvas.height - 30),
-        width: 40,
-        height: 40
+        size: 48
     };
     obstacles.push(obstacle);
 }
 
 function drawSwimmer() {
-    ctx.drawImage(swimmer, 50, canvas.height / 2 - swimmer.height / 2);
+    ctx.font = `${swimmer.size}px Arial`;
+    ctx.fillText(swimmer.emoji, swimmer.x, swimmer.y);
 }
 
 function drawShark() {
-    ctx.drawImage(shark, canvas.width - shark.width - 20, canvas.height / 2 - shark.height / 2);
+    ctx.font = `${shark.size}px Arial`;
+    ctx.fillText(shark.emoji, shark.x, shark.y);
 }
 
 function drawObstacles() {
     obstacles.forEach(obstacle => {
-        ctx.drawImage(obstacle.img, obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+        ctx.font = `${obstacle.size}px Arial`;
+        ctx.fillText(obstacle.emoji, obstacle.x, obstacle.y);
     });
 }
 
@@ -61,15 +59,11 @@ function gameLoop() {
 }
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowUp' && canvas.height / 2 > 0) {
-        canvas.height -= 10;
-    } else if (event.key === 'ArrowDown' && canvas.height / 2 < canvas.height - swimmer.height) {
-        canvas.height += 10;
+    if (event.key === 'ArrowUp' && swimmer.y > 50) {
+        swimmer.y -= 20;
+    } else if (event.key === 'ArrowDown' && swimmer.y < canvas.height - 50) {
+        swimmer.y += 20;
     }
 });
 
-swimmer.onload = () => {
-    shark.onload = () => {
-        gameLoop();
-    };
-};
+gameLoop();
