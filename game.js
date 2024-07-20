@@ -1,3 +1,9 @@
+document.getElementById('startButton').addEventListener('click', function() {
+    this.style.display = 'none'; // Cache le bouton
+    document.getElementById('gameCanvas').hidden = false; // Affiche le canvas
+    gameLoop(); // Démarre la boucle de jeu
+});
+
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 canvas.width = 800;
@@ -37,6 +43,7 @@ function drawObstacles() {
 }
 
 function updateGame() {
+    if (gameOver) return;
     obstacles.forEach(obstacle => {
         obstacle.x -= 5; // Vitesse de déplacement des obstacles
     });
@@ -55,6 +62,8 @@ function gameLoop() {
     ctx.fillText("Score: " + score, 10, 30);
     if (!gameOver) {
         requestAnimationFrame(gameLoop);
+    } else {
+        document.getElementById('startButton').style.display = 'block'; // Affiche à nouveau le bouton après Game Over
     }
 }
 
@@ -65,5 +74,3 @@ document.addEventListener('keydown', (event) => {
         swimmer.y += 20;
     }
 });
-
-gameLoop();
